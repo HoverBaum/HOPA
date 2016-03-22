@@ -34,7 +34,7 @@ const HOPAControllers = function () {
     function bindDataForController(controller) {
         for (var property in controller) {
             if (controller.hasOwnProperty(property)) {
-                bindProperty(property, controller);
+                bindProperty(property, controller, controller[property]);
             }
         }
     }
@@ -42,10 +42,35 @@ const HOPAControllers = function () {
     /**
      *   Databinds a single property.
      */
-    function bindProperty(property, controller) {
+    function bindProperty(property, controller, initialValue) {
         var DOMRepresentations = findDomRepresentations(property);
         var DOMValues = findDomValues(property);
-        controller[property];
+        
+        //DOM Values to Data.
+        DOMValues.forEach(value => {
+            console.log(value);
+            value.addEventListener('keyup', function(e) {
+                controller[property] = value.value;
+            });
+        });
+        
+        //Data change to DOMRepresentation.
+        Object.defineProperty(controller, property, {
+            set: function(newVal) {
+                dataToDOM(DOMRepresentations, 'innerHTML', newVal);
+                dataToDOM(DOMValues, 'value', newVal);
+            }
+        });
+        
+        //Initially set a value to the DOM.
+        dataToDOM(DOMRepresentations, 'innerHTML', initialValue);
+        dataToDOM(DOMValues, 'value', initialValue);
+    }
+    
+    function dataToDOM(elements, property, newValue) {
+        elements.forEach(element => {
+            element[property] = newValue;
+        });
     }
 
     /**
