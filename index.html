@@ -8,6 +8,14 @@
     <script src="js/HOPA-controllers.js"></script>
     <script src="js/HOPA.js"></script>
     
+    <style>
+    
+        body {
+            font-family: sans-serif;
+        }
+        
+    </style>
+    
 </head>
 <body>
     
@@ -29,6 +37,13 @@
         });
         HOPA.controller('twoCTRL', function() {
             console.log('Controller TWO loaded');
+            var two = this;
+            two.counter = 0;
+            console.log(two.counter);
+            var interval = setInterval(function() {
+                console.log(two.counter)
+                two.counter = two.counter + 1;
+            },500);
         });
         HOPA.route('/one', {
             controller: 'oneCTRL',

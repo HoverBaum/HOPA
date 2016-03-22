@@ -48,7 +48,6 @@ const HOPAControllers = function () {
         
         //DOM Values to Data.
         DOMValues.forEach(value => {
-            console.log(value);
             value.addEventListener('keyup', function(e) {
                 controller[property] = value.value;
             });
@@ -58,7 +57,6 @@ const HOPAControllers = function () {
         Object.defineProperty(controller, property, {
             set: function(newVal) {
                 dataToDOM(DOMRepresentations, 'innerHTML', newVal);
-                dataToDOM(DOMValues, 'value', newVal);
             }
         });
         

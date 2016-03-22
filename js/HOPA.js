@@ -31,3 +31,7 @@ const HOPA = function () {
     }
 
 }();
+
+//TODO calculations
+//TODO unload controllers
+//TODO scopeing
