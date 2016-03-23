@@ -1,8 +1,7 @@
 const HOPAControllers = function () {
 
     var registeredControllers = [];
-    
-    var runningController = null;
+    var currentController = null;
 
     /**
      *   Registers a new controller with the given name.
@@ -24,8 +23,8 @@ const HOPAControllers = function () {
     function runController(name) {
         registeredControllers.forEach(controller => {
             if (controller.name === name) {
-                runningController = new controller.controller();
-                bindDataForController(runningController);
+                currentController = new controller.controller();
+                bindDataForController(currentController);
             }
         });
     }
@@ -56,8 +55,10 @@ const HOPAControllers = function () {
         });
 
         //Data change to DOMRepresentation.
+        console.log('Setting property for ' + property)
         Object.defineProperty(controller, property, {
             set: function (newVal) {
+                console.log(property + '   ' + newVal);
                 dataToDOM(DOMRepresentations, 'innerHTML', newVal);
                 this.value = newVal;
             },
@@ -65,7 +66,7 @@ const HOPAControllers = function () {
                 return this.value;
             }
         });
-        
+
         //Make sure the initial value of this property remains.
         controller[property] = initialValue;
 
