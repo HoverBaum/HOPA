@@ -54,7 +54,6 @@ const HOPAControllers = function () {
         });
 
         //Data change to DOMRepresentation.
-        console.log('Setting property for ' + property)
         Object.defineProperty(controller, property, {
             set: function (newVal) {
                 dataToDOM(DOMRepresentations, 'innerHTML', newVal);
