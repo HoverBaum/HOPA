@@ -1,6 +1,8 @@
 const HOPAControllers = function () {
 
     var registeredControllers = [];
+    
+    var runningController = null;
 
     /**
      *   Registers a new controller with the given name.
@@ -22,8 +24,8 @@ const HOPAControllers = function () {
     function runController(name) {
         registeredControllers.forEach(controller => {
             if (controller.name === name) {
-                var ctrl = new controller.controller();
-                bindDataForController(ctrl);
+                runningController = new controller.controller();
+                bindDataForController(runningController);
             }
         });
     }

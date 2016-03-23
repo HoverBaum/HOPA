@@ -22,7 +22,7 @@
     <h1>Hover OPA</h1>
     <h2>A simple One Page Application framework</h2>
     
-    <a href="#/one">One</a> <a href="#/two">Two</a>
+    <a href="#/one">One</a> <a href="#/two">Two</a> <a href="#/three">Three</a>
     
     <div id="viewContainer" hopa-view>
 
@@ -41,9 +41,18 @@
             var two = this;
             two.counter = 0;
             var interval = setInterval(function() {
+                console.log(two.counter);
                 two.counter = two.counter + 1;
             },500);
         });
+        
+        HOPA.controller('threeCTRL', function() {
+            console.log('Controller THREE loaded successfully');
+            var three = this;
+            three.a = 0;
+            three.b = 0;
+            three.c = three.a + three.b;
+        })
         
         HOPA.route('/one', {
             controller: 'oneCTRL',
@@ -55,6 +64,10 @@
             templateUrl: 'views/two.html'
         });
         
+        HOPA.route('/three', {
+            controller: 'threeCTRL',
+            templateUrl: 'views/three.html'
+        })
         
         HOPA.init();
     </script>

@@ -32,5 +32,6 @@ const HOPA = function () {
 
 }();
 
+//TODO calculations with databound variables.
 //TODO unload controllers
 //TODO scopeing
