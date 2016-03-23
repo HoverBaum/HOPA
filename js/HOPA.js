@@ -1,7 +1,7 @@
 /**
 
     HOPA - Hover One Page Application
-    
+
     A simple framework for single page aplications.
 
 */
@@ -17,6 +17,14 @@ const HOPA = function () {
 
     }
 
+    function addModel(name, properties) {
+        return HOPAModels.add(name, properties);
+    }
+
+    function registerView(name, templateURL) {
+        HOPAViews.add(name, templateURL)
+    }
+
     /**
      *   Register a controller and identify it by a name.
      */
@@ -27,7 +35,9 @@ const HOPA = function () {
     return {
         controller: registerController,
         route: HOPARoutes.register,
-        init: initHOPA
+        init: initHOPA,
+        model: addModel,
+        view: registerView
     }
 
 }();

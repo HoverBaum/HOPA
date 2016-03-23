@@ -21,6 +21,26 @@ HOPA.route('/pathName', {
 });
 ```
 
+## Definition
+
+Model
+A representation of Data
+
+View
+A representation of data
+When a view gets loaded references to data in it's template gets parsed
+
+templates
+HTML representation of a view
+
+Events
+Are how communication works.
+Multiple things can throw events.
+ - User interaction
+ - Change of data
+ - view changes
+
+
 ## Databinding
 
 The DOM can containe two types of references to a property. 'representations', places in the DOM where a value gets represented and 'inputs', places in the DOM where data for a property might get inputed.

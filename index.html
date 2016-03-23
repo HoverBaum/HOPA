@@ -6,6 +6,8 @@
     <script src="js/HOPA-helpers.js"></script>
     <script src="js/HOPA-routes.js"></script>
     <script src="js/HOPA-controllers.js"></script>
+    <script src="js/HOPA-models.js"></script>
+    <script src="js/HOPA-views.js"></script>
     <script src="js/HOPA.js"></script>
 
     <style>
@@ -31,7 +33,7 @@
     </div>
 
     <script>
-        HOPA.controller('oneCTRL', function() {
+        /*HOPA.controller('oneCTRL', function() {
             console.log('Controller one loaded');
             this.name = 'Your name';
         });
@@ -67,7 +69,17 @@
         HOPA.route('/three', {
             controller: 'threeCTRL',
             templateUrl: 'views/three.html'
+        });*/
+
+        var user = HOPA.model('user', {
+            name: 'Hendrik',
+            age: 23
         });
+
+        HOPA.view('welcome', 'views/welcome.html');
+        HOPA.view('user', 'views/user.html');
+
+        HOPA.route('/user', 'user');
 
         HOPA.init();
     </script>

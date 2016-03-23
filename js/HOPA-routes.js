@@ -46,36 +46,17 @@ const HOPARoutes = function () {
      *   Render and initialize a route.
      */
     function switchToRoute(route) {
-        renderRoute(route).then(function () {
-            HOPAControllers.runController(route.controller);
-        });
-    }
-
-    /**
-     *   Renders a route by displaying the associated element.
-     */
-    function renderRoute(route) {
-        return new Promise((resolve, reject) => {
-            HOPAHelper.get(route.templateUrl)
-                .then(function (template) {
-                    var parent = document.querySelector('[hopa-view]');
-                    parent.innerHTML = template;
-                    resolve();
-                })
-                .catch(function (error) {
-                    console.error(error);
-                });
-        });
+        var parent = document.querySelector('[hopa-view]');
+        HOPAViews.display(route.view, parent);
     }
 
     /**
      * Register a route and what should be displayed in it.
      */
-    function registerRoute(path, opts) {
+    function registerRoute(path, viewName) {
         var newRoute = {
             path: path,
-            templateUrl: opts.templateUrl,
-            controller: opts.controller
+            view: viewName
         }
         registeredRoutes.push(newRoute);
     }
