@@ -35,6 +35,7 @@
             console.log('Controller one loaded');
             this.name = 'Your name';
         });
+        
         HOPA.controller('twoCTRL', function() {
             console.log('Controller TWO loaded');
             var two = this;
@@ -50,6 +51,7 @@
             controller: 'oneCTRL',
             templateUrl: 'views/one.html'
         });
+        
         HOPA.route('/two', {
             controller: 'twoCTRL',
             templateUrl: 'views/two.html'

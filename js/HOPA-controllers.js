@@ -45,26 +45,34 @@ const HOPAControllers = function () {
     function bindProperty(property, controller, initialValue) {
         var DOMRepresentations = findDomRepresentations(property);
         var DOMValues = findDomValues(property);
-        
+
         //DOM Values to Data.
         DOMValues.forEach(value => {
-            value.addEventListener('keyup', function(e) {
+            value.addEventListener('keyup', function (e) {
                 controller[property] = value.value;
             });
         });
-        
+
         //Data change to DOMRepresentation.
+        console.log('Setting property for ' + property)
         Object.defineProperty(controller, property, {
-            set: function(newVal) {
+            set: function (newVal) {
                 dataToDOM(DOMRepresentations, 'innerHTML', newVal);
+                this.value = newVal;
+            },
+            get: function () {
+                return this.value;
             }
         });
         
+        //Make sure the initial value of this property remains.
+        controller[property] = initialValue;
+
         //Initially set a value to the DOM.
         dataToDOM(DOMRepresentations, 'innerHTML', initialValue);
         dataToDOM(DOMValues, 'value', initialValue);
     }
-    
+
     function dataToDOM(elements, property, newValue) {
         elements.forEach(element => {
             element[property] = newValue;
