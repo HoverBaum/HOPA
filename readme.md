@@ -87,3 +87,39 @@ HOPA.view('counter', 'views/counter.html', function() {
     }
 });
 ```
+
+```html
+<div hopa-model="counter">
+    <h1>Counter</h1>
+    <span>{{counter.count}}</span>
+    <button hopa-click="startCounter()">Start</button>
+    <button hopa-click="stopCounter()">Stop</button>
+</div>
+```
+
+### Nesting views
+
+Once defined Views can be nested. Would you for example want to nest the `counter` view inside a `welcome` view you can easily do that by referring to it with its name.
+
+```html
+<!-- views/welcome.html -->
+<div hopa-model="user">
+    <p>Welcome, <span>{{user.name}}</span></p>
+
+    <!-- put a counter here -->
+    <div hopa-view="counter"></div>
+</div>
+```
+
+## Routing
+
+HOPA also supplies a way to handle URL, HOPA calls this a route. You can specify a route by providing a URL and a view that should be used.
+
+```javascript
+HOPA.route('/user', 'user');
+```
+
+Now all that is left to do is add a single div with `hopa-view` to your page.
+
+## initialization
+HOPA needs to be initialized. So after you have added all models views and routes simply call `HOPA.init()` and HOPA will do the rest.
