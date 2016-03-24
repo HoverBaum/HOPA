@@ -65,4 +65,25 @@ HOPA.view('welcome', 'views/welcome.html');
 </div>
 ```
 
-However sometime you might want to react to users input or do other computations.
+However sometime you might want to react to users input or do other computations. To do this you can pass along a function when creating a view. Any method you declare as `this.method = function() {}` inside this function will be available inside the template.
+
+```javascript
+HOPA.view('counter', 'views/counter.html', function() {
+    let counter = HOPA.model('counter', { count: 0 });
+    let interval;
+
+    //Start counting up every second.
+    this.start = function() {
+        interval = setInterval(function() { counter.count = counter.count + 1; }, 1000);
+    }
+
+    //Stop counting.
+    this.stop = function() {
+        clearInterval(interval);
+    }
+
+    this.destroy = function() {
+        this.stop();
+    }
+});
+```
