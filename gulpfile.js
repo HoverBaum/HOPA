@@ -1,14 +1,10 @@
 const gulp = require('gulp');
 const concat = require('gulp-concat');
-const minify = require('gulp-minify');
+const jsmin = require('gulp-jsmin');
 
 gulp.task('dist', function() {
   return gulp.src('js/*.js')
     .pipe(concat('hopa.js'))
-    .pipe(minify({
-        ext:{
-            min:'.js'
-        }
-    }))
+    .pipe(jsmin())
     .pipe(gulp.dest('dist'));
 });
