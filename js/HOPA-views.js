@@ -17,6 +17,10 @@ const HOPAViews = function() {
         });
     }
 
+    function switchViewTo(viewName, parent) {
+        
+    }
+
     /**
     *   Displays a view, starts it's lifecycle.
     */
