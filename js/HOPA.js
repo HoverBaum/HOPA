@@ -39,7 +39,6 @@ const HOPA = function() {
     }
 
     return {
-        controller: registerController,
         route: HOPARoutes.register,
         init: initHOPA,
         model: addModel,

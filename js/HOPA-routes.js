@@ -1,6 +1,8 @@
 /**
- *   HOPA Routes implements nested handling of routes.
- */
+
+   HOPA Routes implements handling of URLs and associated views.
+
+*/
 const HOPARoutes = function() {
 
     //All routes that are registered with this handler.

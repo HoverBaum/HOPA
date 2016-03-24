@@ -1,3 +1,8 @@
+/**
+
+    Views withing HOPA are reusable components.
+
+*/
 const HOPAViews = function() {
 
     //All views that are currently registered.

@@ -1,12 +1,13 @@
 /**
-    A Model within HOPA.
+
+    Models within HOPA.
 
     Models can be registered with this module.
-    A model can contain data and behavior that is associated with it.
-*/
 
+*/
 const HOPAModels = function() {
 
+    //All models that are registered with HOPA.
     let registeredModels = [];
 
     /**
@@ -58,10 +59,15 @@ const HOPAModels = function() {
      *   Adds a models properties in a way that allows to add listeners.
      */
     function addPropertyToModel(property, model, value) {
-        let values = model.values;
+
+        //Remember this property for reference.
         model.properties.push(property);
+
+        //Remember listeners for this property.
         let listeners = [];
         model.propertyListeners[property] = listeners;
+
+        //Add the property with getter and setter.
         Object.defineProperty(values, property, {
             set: function(newVal) {
                 let oldVal = value;
@@ -76,11 +82,17 @@ const HOPAModels = function() {
         });
     }
 
+    /**
+     *   Find a model by name and binds it to a host element.
+     */
     function findAndBindModelToHost(modelName, host) {
         var model = getModelByName(modelName);
         model.bindToElement(host);
     }
 
+    /**
+     *   Binds a model to a host element.
+     */
     function bindModelToHost(model, host) {
         model.properties.forEach(property => {
             bindProperty(property, model, host);
@@ -91,29 +103,70 @@ const HOPAModels = function() {
      *   Databinds a single property.
      */
     function bindProperty(property, model, parent) {
-        let values = model.values;
-        let initialValue = model.values[property];
         let propertyName = `${model.name}.${property}`;
-        let DOMRepresentations = findDomRepresentations(propertyName, parent);
-        let DOMValues = findDomValues(propertyName, parent);
 
-        //DOM Values to Data.
+        bindPropertyTowardsDOM(property, model, propertyName, parent);
+        bindDOMTowardsProperty(property, model, propertyName, parent);
+    }
+
+    /**
+     *   Make changes in the DOM reflect to properties.
+     */
+    function bindDOMTowardsProperty(property, model, propertyName, parent) {
+        let values = model.values;
+        let DOMValues = findDomValues(propertyName, parent);
         DOMValues.forEach(value => {
             value.addEventListener('input', function(e) {
                 values[property] = value.value;
             });
         });
+    }
+
+    /**
+     *   Make changes to properties reflect in the DOM.
+     */
+    function bindPropertyTowardsDOM(property, model, propertyName, parent) {
+        let initialValue = model.values[property];
+
+        //Get all references in the DOM and create a single method to update them.
+        let updateDOM = generateDOMUpdater(propertyName, parent);
 
         //Data change to DOMRepresentation.
         let listener = function(newValue) {
-            dataToDOM(DOMRepresentations, 'innerHTML', newValue);
-            dataToDOM(DOMValues, 'value', newValue);
+            updateDOM(newValue);
         }
         model.addPropertyListener(property, listener);
 
         //Initially set a value to the DOM.
-        dataToDOM(DOMRepresentations, 'innerHTML', initialValue);
-        dataToDOM(DOMValues, 'value', initialValue);
+        updateDOM(initialValue);
+    }
+
+    /**
+     *   Generate a function that updates all references in the DOM with a new value.
+     *   First finds all references, then generetes an updater.
+     */
+    function generateDOMUpdater(propertyName, parent) {
+        let DOMRepresentations = findDomRepresentations(propertyName, parent);
+        let DOMValues = findDomValues(propertyName, parent);
+        let updateDOM = dataToDOMFactory([{
+            elements: DOMRepresentations,
+            property: 'innerHTML'
+        }, {
+            elements: DOMValues,
+            property: 'value'
+        }]);
+        return updateDOM;
+    }
+
+    /**
+     *   Returns a single function to update multiple lists of DOM representations with different properties.
+     */
+    function dataToDOMFactory(lists) {
+        return function(newValue) {
+            lists.forEach(list => {
+                dataToDOM(list.elements, list.property, newValue);
+            })
+        }
     }
 
     /**
