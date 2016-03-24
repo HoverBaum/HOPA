@@ -1,0 +1,19 @@
+{
+  "name": "hopa",
+  "description": "A simplistic framework build as a learning experience",
+  "main": "dist/hopa.js",
+  "authors": [
+    "Hendrik Wallbaum <mail@hendrikwallbaum.de>"
+  ],
+  "homepage": "https://github.com/HoverBaum/HOPA",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "views",
+    "index.html",
+    "js"
+  ]
+}

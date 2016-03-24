@@ -1,0 +1,19 @@
+{
+  "name": "hopa",
+  "version": "1.0.0",
+  "description": "A simplistic framework build as a learning experience",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HoverBaum/HOPA.git"
+  },
+  "author": "Hendrik Wallbaum <mail@hendrikwallbaum.de>",
+  "bugs": {
+    "url": "https://github.com/HoverBaum/HOPA/issues"
+  },
+  "homepage": "https://github.com/HoverBaum/HOPA#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-minify": "0.0.7"
+  }
+}
