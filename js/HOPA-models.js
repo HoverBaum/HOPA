@@ -68,6 +68,7 @@ const HOPAModels = function() {
         model.propertyListeners[property] = listeners;
 
         //Add the property with getter and setter.
+        let values = model.values;
         Object.defineProperty(values, property, {
             set: function(newVal) {
                 let oldVal = value;

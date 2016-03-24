@@ -104,7 +104,7 @@ const HOPAViews = function() {
      */
     function destroyView(viewID) {
         let parent = document.querySelector(`[hopa-viewID="${viewID}"]`);
-        HOPAHelper.forEach(parent.querySelectorAll('hopa-view'), viewParent => {
+        HOPAHelper.forEach(parent.querySelectorAll('[hopa-view]'), viewParent => {
             destroyView(viewParent.getAttribute('hopa-viewID'));
         });
         let view = getRunningViewById(parent.getAttribute('hopa-viewID'));
