@@ -17,26 +17,38 @@ const HOPAViews = function() {
         });
     }
 
+    /**
+    *   Switch the view displayed in a parent to the specified one.
+    *   Will first destroy ant possibly running views and then start the new one.
+    */
     function switchViewTo(viewName, parent) {
-        
+        if(parent.getAttribute('hopa-viewID')) {
+            destroyView(parent.getAttribute('hopa-viewID'));
+        }
+        displayAndParseView(viewName, parent);
+    }
+
+    /**
+    *   Displays a view and then parses its template for databindings and subviews.
+    */
+    function displayAndParseView(viewName, parent) {
+        let view = getViewForRunning(viewName);
+        parent.setAttribute('hopa-viewID', view.id);
+        displazTemplateIn(view.templateURL, parent, function() {
+            startControlls(view);
+            runningViews.push(view);
+            parseTemplateParent(parent, view);
+        });
     }
 
     /**
     *   Displays a view, starts it's lifecycle.
     */
-    function displayView(viewName, parent) {
-        let registeredView = getViewByName(viewName);
-        let view = copyViewForRunning(registeredView);
-        if(parent.getAttribute('hopa-viewID')) {
-            destroyView(parent.getAttribute('hopa-viewID'));
-        }
-        HOPAHelper.get(view.templateURL)
+    function displazTemplateIn(templateURL, parent, callback) {
+        HOPAHelper.get(templateURL)
             .then(function (template) {
                 parent.innerHTML = template;
-                startControlls(view);
-                runningViews.push(view);
-                parent.setAttribute('hopa-viewID', view.id);
-                parseTemplateParent(parent, view);
+                callback();
             })
             .catch(function (error) {
                 console.error(error);
@@ -46,7 +58,8 @@ const HOPAViews = function() {
     /**
     *   Copies a registered view to run a different object with unique id per running view.
     */
-    function copyViewForRunning(view) {
+    function getViewForRunning(viewName) {
+        let view = getViewByName(viewName);
         return {
             name: view.name,
             templateURL: view.templateURL,
@@ -55,9 +68,12 @@ const HOPAViews = function() {
         }
     }
 
+    /**
+    *   Starts controlls for a view if the view has any.
+    */
     function startControlls(view) {
         if(view.controlls) {
-            view.destroy = view.controlls();
+            view.controlls();
         }
     }
 
@@ -69,7 +85,7 @@ const HOPAViews = function() {
             HOPAModels.bindModelToHost(modelElm.getAttribute('hopa-model'), modelElm, view.id);
         });
         HOPAHelper.forEach(parent.querySelectorAll('[hopa-view]'), viewElm => {
-            displayView(viewElm.getAttribute('hopa-view'), viewElm);
+            displayAndParseView(viewElm.getAttribute('hopa-view'), viewElm);
         });
         HOPAHelper.forEach(parent.querySelectorAll('[hopa-click]'), clickElm => {
             clickElm.addEventListener('click', function() {
@@ -79,15 +95,12 @@ const HOPAViews = function() {
     }
 
     /**
-    *   Destroys views, deregisters all listeners and databindings.
+    *   Destroys views, deregisters all listeners and databindings and removes template from DOM.
     */
     function destroyView(viewID) {
         let parent = document.querySelector(`[hopa-viewID="${viewID}"]`);
         HOPAHelper.forEach(parent.querySelectorAll('hopa-view'), viewParent => {
             destroyView(viewParent.getAttribute('hopa-viewID'));
-        });
-        HOPAHelper.forEach(parent.querySelectorAll('[hopa-model]'), modelElm => {
-            HOPAModels.debindModelFromHost(modelElm.getAttribute('hopa-model'), modelElm);
         });
         let view = getRunningViewById(parent.getAttribute('hopa-viewID'));
         let index = runningViews.indexOf(view);
@@ -123,7 +136,7 @@ const HOPAViews = function() {
 
     return {
         add: createView,
-        display: displayView
+        switchTo: switchViewTo
     }
 
 }();

@@ -26,9 +26,6 @@ const HOPAModels = function(){
         newModel.bindToElement = function(host) {
             bindModelToHost(newModel, host);
         };
-        newModel.debindFromElement = function(host) {
-            debindModelFromHost(newModel, host);
-        };
         newModel.addPropertyListener = function(property, listener) {
             newModel.propertyListeners[property].push(listener);
         };
@@ -114,24 +111,6 @@ const HOPAModels = function(){
     }
 
     /**
-    *   Finds a model and debinds it from a host Element in the DOM.
-    */
-    function findAnddebindModelFromHost(modelName, host) {
-        var model = getModelByName(modelName);
-        model.debindFromElement(host);
-    }
-
-    function debindModelFromHost(model, host) {
-        model.properties.forEach(property => {
-            debindProperty(property, model, host);
-        });
-    }
-
-    function debindProperty(property, model, host) {
-        //TODO debind the listeners
-    }
-
-    /**
      *   Find all elements thats value represents a property.
      *   Returns an array of all of them.
      */
@@ -177,7 +156,6 @@ const HOPAModels = function(){
 
     return {
         add: createModel,
-        bindModelToHost: findAndBindModelToHost,
-        debindModelFromHost: findAnddebindModelFromHost
+        bindModelToHost: findAndBindModelToHost
     }
 }();

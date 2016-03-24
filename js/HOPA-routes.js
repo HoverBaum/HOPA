@@ -47,7 +47,7 @@ const HOPARoutes = function () {
      */
     function switchToRoute(route) {
         var parent = document.querySelector('[hopa-view]');
-        HOPAViews.display(route.view, parent);
+        HOPAViews.switchTo(route.view, parent);
     }
 
     /**
