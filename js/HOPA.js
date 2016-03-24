@@ -5,7 +5,7 @@
     A simple framework for single page aplications.
 
 */
-const HOPA = function () {
+const HOPA = function() {
 
     /**
      *   This will do the initialization of HOPA.
@@ -18,15 +18,15 @@ const HOPA = function () {
     }
 
     /**
-    *   Add a new model.
-    */
+     *   Add a new model.
+     */
     function addModel(name, properties) {
         return HOPAModels.add(name, properties);
     }
 
     /**
-    *   Register a view.
-    */
+     *   Register a view.
+     */
     function registerView(name, templateURL, controlls) {
         HOPAViews.add(name, templateURL, controlls)
     }

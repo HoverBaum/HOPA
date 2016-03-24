@@ -5,13 +5,13 @@
     A model can contain data and behavior that is associated with it.
 */
 
-const HOPAModels = function(){
+const HOPAModels = function() {
 
     let registeredModels = [];
 
     /**
-    *   Creates and registers a new model.
-    */
+     *   Creates and registers a new model.
+     */
     function createModel(name, properties) {
         let newModel = {
             name,
@@ -20,6 +20,25 @@ const HOPAModels = function(){
             propertyListeners: {}
         };
 
+        //Let the model
+        addMethodsToNewModel(newModel);
+        registeredModels.push(newModel);
+
+        //Add the property so that we can have listeners for them.
+        for (var property in properties) {
+            if (properties.hasOwnProperty(property)) {
+                newModel.addProperty(property, properties[property]);
+            }
+        }
+
+        //Return the values of this model so it properties can be used normally.
+        return newModel.values;
+    }
+
+    /**
+     *   Adds basic functionaities to a new model.
+     */
+    function addMethodsToNewModel(newModel) {
         newModel.addProperty = function(property, value) {
             addPropertyToModel(property, newModel, value);
         };
@@ -33,30 +52,25 @@ const HOPAModels = function(){
             var index = newModel.propertyListeners.indexOf(listener);
             newModel.propertyListeners[property].splice(index, 1);
         };
-
-        registeredModels.push(newModel);
-        for (var property in properties) {
-            if (properties.hasOwnProperty(property)) {
-                newModel.addProperty(property, properties[property]);
-            }
-        }
-        return newModel.values;
     }
 
+    /**
+     *   Adds a models properties in a way that allows to add listeners.
+     */
     function addPropertyToModel(property, model, value) {
         let values = model.values;
         model.properties.push(property);
         let listeners = [];
         model.propertyListeners[property] = listeners;
         Object.defineProperty(values, property, {
-            set: function (newVal) {
+            set: function(newVal) {
                 let oldVal = value;
                 value = newVal;
                 listeners.forEach(listener => {
                     listener(newVal, oldVal);
                 });
             },
-            get: function () {
+            get: function() {
                 return value;
             }
         });
@@ -85,7 +99,7 @@ const HOPAModels = function(){
 
         //DOM Values to Data.
         DOMValues.forEach(value => {
-            value.addEventListener('input', function (e) {
+            value.addEventListener('input', function(e) {
                 values[property] = value.value;
             });
         });
@@ -102,9 +116,12 @@ const HOPAModels = function(){
         dataToDOM(DOMValues, 'value', initialValue);
     }
 
+    /**
+     *   Sets the specified property of a list of DOM elements to a new value.
+     */
     function dataToDOM(elements, property, newValue) {
         elements.forEach(element => {
-            if(element[property] !== newValue) {
+            if (element[property] !== newValue) {
                 element[property] = newValue;
             }
         });
@@ -142,12 +159,12 @@ const HOPAModels = function(){
     }
 
     /**
-    *   Returns the model with the given name if it is registered.
-    */
+     *   Returns the model with the given name if it is registered.
+     */
     function getModelByName(modelName) {
         let foundModel;
-        registeredModels.forEach( model => {
-            if(model.name === modelName) {
+        registeredModels.forEach(model => {
+            if (model.name === modelName) {
                 foundModel = model;
             }
         });

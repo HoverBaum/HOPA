@@ -1,7 +1,7 @@
 /**
  *   HOPA Routes implements nested handling of routes.
  */
-const HOPARoutes = function () {
+const HOPARoutes = function() {
 
     //All routes that are registered with this handler.
     var registeredRoutes = [];
@@ -19,7 +19,7 @@ const HOPARoutes = function () {
      *   Registers a listener for the change of hashvalues.
      */
     function registerHashlistener() {
-        window.addEventListener('hashchange', function (e) {
+        window.addEventListener('hashchange', function(e) {
             var oldURL = e.oldURL;
             var newURL = e.newURL;
 
