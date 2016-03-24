@@ -33,43 +33,6 @@
     </div>
 
     <script>
-        /*HOPA.controller('oneCTRL', function() {
-            console.log('Controller one loaded');
-            this.name = 'Your name';
-        });
-
-        HOPA.controller('twoCTRL', function() {
-            console.log('Controller TWO loaded');
-            var two = this;
-            two.counter = 0;
-            var interval = setInterval(function() {
-                console.log(two.counter);
-                two.counter = two.counter + 1;
-            },500);
-        });
-
-        HOPA.controller('threeCTRL', function() {
-            console.log('Controller THREE loaded successfully');
-            var three = this;
-            three.a = 0;
-            three.b = 0;
-            three.c = three.a + three.b;
-        });
-
-        HOPA.route('/one', {
-            controller: 'oneCTRL',
-            templateUrl: 'views/one.html'
-        });
-
-        HOPA.route('/two', {
-            controller: 'twoCTRL',
-            templateUrl: 'views/two.html'
-        });
-
-        HOPA.route('/three', {
-            controller: 'threeCTRL',
-            templateUrl: 'views/three.html'
-        });*/
 
         var user = HOPA.model('user', {
             name: 'Hendrik',
@@ -82,6 +45,7 @@
         HOPA.route('/user', 'user');
 
         HOPA.init();
+        
     </script>
 
 
