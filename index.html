@@ -23,7 +23,7 @@
     <h1>Hover OPA</h1>
     <h2>A simple One Page Application framework</h2>
 
-    <a href="#/one">One</a> <a href="#/two">Two</a> <a href="#/three">Three</a>
+    <a href="#/user">User</a> <a href="#/counter">Counter</a>
 
     <div id="viewContainer" hopa-view>
 
@@ -44,8 +44,10 @@
 
         HOPA.view('welcome', 'views/welcome.html');
         HOPA.view('user', 'views/user.html');
+        HOPA.view('counter', 'views/counter.html');
 
         HOPA.route('/user', 'user');
+        HOPA.route('/counter', 'counter');
 
         HOPA.init();
 
