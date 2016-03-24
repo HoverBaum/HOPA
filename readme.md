@@ -2,29 +2,13 @@
 
 ## How To
 
-### Register Controllers
-Controllers need to be registered with HOPA before they can be used for routes.
-```javascript
-HOPA.controller('ControllerName', function() {
-    //Code goes here
-
-    this.property = 'This can use databinding';
-});
-```
-
-### Setup routes
-To create a route at `/#/pathName` that uses a controller named `controllerName`.
-```javascript
-HOPA.route('/pathName', {
-    controller: 'controllerName',
-    templateUrl: 'path/to/template.html'
-});
-```
+Coming soon TM
 
 ## Definition
 
 Model
 A representation of Data
+This can be bound to an element in the DOM.
 
 View
 A representation of data
