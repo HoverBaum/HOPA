@@ -5,7 +5,6 @@
     <title>HOPA demo</title>
     <script src="js/HOPA-helpers.js"></script>
     <script src="js/HOPA-routes.js"></script>
-    <script src="js/HOPA-controllers.js"></script>
     <script src="js/HOPA-models.js"></script>
     <script src="js/HOPA-views.js"></script>
     <script src="js/HOPA.js"></script>
@@ -39,13 +38,17 @@
             age: 23
         });
 
+        var counter = HOPA.model('counter', {
+            count: 0
+        });
+
         HOPA.view('welcome', 'views/welcome.html');
         HOPA.view('user', 'views/user.html');
 
         HOPA.route('/user', 'user');
 
         HOPA.init();
-        
+
     </script>
 
 

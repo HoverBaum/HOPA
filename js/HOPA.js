@@ -17,10 +17,16 @@ const HOPA = function () {
 
     }
 
+    /**
+    *   Add a new model.
+    */
     function addModel(name, properties) {
         return HOPAModels.add(name, properties);
     }
 
+    /**
+    *   Register a view.
+    */
     function registerView(name, templateURL) {
         HOPAViews.add(name, templateURL)
     }
@@ -32,17 +38,12 @@ const HOPA = function () {
         HOPAControllers.register(name, controller);
     }
 
-    function emitEvent(eventName, data) {
-        var event = new CustomEvent(eventName, data);
-    }
-
     return {
         controller: registerController,
         route: HOPARoutes.register,
         init: initHOPA,
         model: addModel,
-        view: registerView,
-        emit: emitEvent
+        view: registerView
     }
 
 }();

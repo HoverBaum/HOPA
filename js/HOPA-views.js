@@ -1,7 +1,11 @@
 const HOPAViews = function() {
 
+    //All views that are currently registered.
     let registeredViews = [];
 
+    /**
+    *   Creates and registeres a new view.
+    */
     function createView(name, templateURL) {
             registeredViews.push({
                 name,
@@ -9,6 +13,9 @@ const HOPAViews = function() {
             });
     }
 
+    /**
+    *   Displays a view, starts it's lifecycle.
+    */
     function displayView(viewName, parent) {
         let view = getViewByName(viewName);
         HOPAHelper.get(view.templateURL)
@@ -33,6 +40,9 @@ const HOPAViews = function() {
         });
     }
 
+    /**
+    *   Returns a view by name if registered.
+    */
     function getViewByName(viewName) {
         let foundView;
         registeredViews.forEach( view => {

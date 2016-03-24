@@ -9,6 +9,9 @@ const HOPAModels = function(){
 
     let registeredModels = [];
 
+    /**
+    *   Creates and registers a new model.
+    */
     function createModel(name, properties) {
         let newModel = {
             name,
@@ -16,9 +19,9 @@ const HOPAModels = function(){
             properties: [],
             propertyListerners: {}
         };
-        registeredModels.push(newModel);
+
         newModel.addProperty = function(property, value) {
-            addPropertyToModel(property, newModel.values, value, newModel);
+            addPropertyToModel(property, newModel, value);
         };
         newModel.bindToElement = function(host) {
             bindModelToHost(newModel, host);
@@ -26,15 +29,17 @@ const HOPAModels = function(){
         newModel.addPropertyListener = function(property, listener) {
             newModel.propertyListerners[property].push(listener);
         }
+        registeredModels.push(newModel);
         for (var property in properties) {
             if (properties.hasOwnProperty(property)) {
                 newModel.addProperty(property, properties[property]);
             }
         }
-        return newModel;
+        return newModel.values;
     }
 
-    function addPropertyToModel(property, values, value, model) {
+    function addPropertyToModel(property, model, value) {
+        let values = model.values;
         model.properties.push(property);
         let listeners = [];
         model.propertyListerners[property] = listeners;
