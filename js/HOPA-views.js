@@ -29,10 +29,10 @@ const HOPAViews = function() {
         HOPAHelper.get(view.templateURL)
             .then(function (template) {
                 parent.innerHTML = template;
+                startControlls(view);
                 runningViews.push(view);
                 parent.setAttribute('hopa-viewID', view.id);
                 parseTemplateParent(parent, view);
-                startControlls(view);
             })
             .catch(function (error) {
                 console.error(error);
@@ -66,6 +66,11 @@ const HOPAViews = function() {
         });
         HOPAHelper.forEach(parent.querySelectorAll('[hopa-view]'), viewElm => {
             displayView(viewElm.getAttribute('hopa-view'), viewElm);
+        });
+        HOPAHelper.forEach(parent.querySelectorAll('[hopa-click]'), clickElm => {
+            clickElm.addEventListener('click', function() {
+                eval('view.' + clickElm.getAttribute('hopa-click'));
+            });
         });
     }
 

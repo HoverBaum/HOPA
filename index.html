@@ -38,17 +38,28 @@
             age: 23
         });
 
-        var counter = HOPA.model('counter', {
-            count: 0
-        });
-
         HOPA.view('welcome', 'views/welcome.html');
         HOPA.view('user', 'views/user.html');
         HOPA.view('nameUser', 'views/nameUser.html');
         HOPA.view('counter', 'views/counter.html', function() {
-            let interval = setInterval(function() {
-                counter.count = counter.count + 1;
-            },500);
+            let counter = HOPA.model('counter', {
+                count: 0
+            });
+            let interval;
+            this.startCounter = function() {
+                interval = setInterval(function() {
+                    counter.count = counter.count + 1;
+                },500);
+            }
+
+            this.stopCounter = function() {
+                clearInterval(interval);
+            }
+
+            this.clear = function() {
+                counter.count = 0;
+            }
+
             return function() {
                 clearInterval(interval);
             }
