@@ -44,7 +44,15 @@
 
         HOPA.view('welcome', 'views/welcome.html');
         HOPA.view('user', 'views/user.html');
-        HOPA.view('counter', 'views/counter.html');
+        HOPA.view('nameUser', 'views/nameUser.html');
+        HOPA.view('counter', 'views/counter.html', function() {
+            let interval = setInterval(function() {
+                counter.count = counter.count + 1;
+            },500);
+            return function() {
+                clearInterval(interval);
+            }
+        });
 
         HOPA.route('/user', 'user');
         HOPA.route('/counter', 'counter');

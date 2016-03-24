@@ -17,7 +17,7 @@ const HOPAModels = function(){
             name,
             values: {},
             properties: [],
-            propertyListerners: {}
+            propertyListeners: {}
         };
 
         newModel.addProperty = function(property, value) {
@@ -26,9 +26,17 @@ const HOPAModels = function(){
         newModel.bindToElement = function(host) {
             bindModelToHost(newModel, host);
         };
+        newModel.debindFromElement = function(host) {
+            debindModelFromHost(newModel, host);
+        };
         newModel.addPropertyListener = function(property, listener) {
-            newModel.propertyListerners[property].push(listener);
-        }
+            newModel.propertyListeners[property].push(listener);
+        };
+        newModel.removePropertyListener = function(property, listener) {
+            var index = newModel.propertyListeners.indexOf(listener);
+            newModel.propertyListeners[property].splice(index, 1);
+        };
+
         registeredModels.push(newModel);
         for (var property in properties) {
             if (properties.hasOwnProperty(property)) {
@@ -42,7 +50,7 @@ const HOPAModels = function(){
         let values = model.values;
         model.properties.push(property);
         let listeners = [];
-        model.propertyListerners[property] = listeners;
+        model.propertyListeners[property] = listeners;
         Object.defineProperty(values, property, {
             set: function (newVal) {
                 let oldVal = value;
@@ -86,9 +94,11 @@ const HOPAModels = function(){
         });
 
         //Data change to DOMRepresentation.
-        model.addPropertyListener(property, newVal => {
-            dataToDOM(DOMRepresentations, 'innerHTML', newVal);
-        });
+        let listener = function(newValue) {
+            dataToDOM(DOMRepresentations, 'innerHTML', newValue);
+            dataToDOM(DOMValues, 'value', newValue);
+        }
+        model.addPropertyListener(property, listener);
 
         //Initially set a value to the DOM.
         dataToDOM(DOMRepresentations, 'innerHTML', initialValue);
@@ -97,8 +107,28 @@ const HOPAModels = function(){
 
     function dataToDOM(elements, property, newValue) {
         elements.forEach(element => {
-            element[property] = newValue;
+            if(element[property] !== newValue) {
+                element[property] = newValue;
+            }
         });
+    }
+
+    /**
+    *   Finds a model and debinds it from a host Element in the DOM.
+    */
+    function findAnddebindModelFromHost(modelName, host) {
+        var model = getModelByName(modelName);
+        model.debindFromElement(host);
+    }
+
+    function debindModelFromHost(model, host) {
+        model.properties.forEach(property => {
+            debindProperty(property, model, host);
+        });
+    }
+
+    function debindProperty(property, model, host) {
+        //TODO debind the listeners
     }
 
     /**
@@ -147,6 +177,7 @@ const HOPAModels = function(){
 
     return {
         add: createModel,
-        bindModelToHost: findAndBindModelToHost
+        bindModelToHost: findAndBindModelToHost,
+        debindModelFromHost: findAnddebindModelFromHost
     }
 }();

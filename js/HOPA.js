@@ -27,8 +27,8 @@ const HOPA = function () {
     /**
     *   Register a view.
     */
-    function registerView(name, templateURL) {
-        HOPAViews.add(name, templateURL)
+    function registerView(name, templateURL, controlls) {
+        HOPAViews.add(name, templateURL, controlls)
     }
 
     /**
