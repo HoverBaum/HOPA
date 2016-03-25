@@ -182,3 +182,44 @@ const HOPA = function() {
     }
 
 }();
+
+const mediator = (function() {
+
+    //So we can test this with node.
+    'use strict'
+
+    //All channels managed by this mediator.
+    const channels = new Map();
+
+    /**
+     *   Subscribes a callback to a channel.
+     */
+    function subscribe(channel, callback) {
+        if (!channels.has(channel)) {
+            channels.set(channel, []);
+        }
+        channels.get(channel).push(callback);
+        return this;
+    };
+
+    /**
+     *   Publishes to a channel, can take any number of extra arguments to publish.
+     */
+    function publish(channel) {
+        if (!channels.has(channel)) {
+            return false;
+        }
+        let args = Array.prototype.slice.call(arguments, 1);
+        channels.get(channel).forEach(subscription => {
+            subscription(...args);
+        });
+        return this;
+    };
+
+    return {
+        publish: publish,
+        subscribe: subscribe,
+        on: subscribe
+    };
+
+}());
