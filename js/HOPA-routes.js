@@ -3,8 +3,8 @@
    HOPA Routes implements handling of URLs and associated views.
 
 */
-const HOPARoutes = HOPA.module('hopa-routes', ['hopa-views']);
-HOPARoutes.run(['hopa-views'], function(Views) {
+let HOPARoutes = HOPA.module('hopa-routes');
+HOPARoutes.export(['hopa-view'], function(Views) {
 
     //All routes that are registered with this handler.
     var registeredRoutes = [];

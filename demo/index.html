@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>HOPA demo</title>
-    <script src="/js/HOPA-helpers.js"></script>
-    <script src="/js/HOPA-routes.js"></script>
     <script src="/js/HOPA-models.js"></script>
     <script src="/js/HOPA-views.js"></script>
     <script src="/js/HOPA.js"></script>
+    <script src="/js/HOPA-helpers.js"></script>
+    <script src="/js/HOPA-routes.js"></script>
+
 
     <style>
 
@@ -33,7 +34,7 @@
 
     <script>
 
-        var demo = HOPA.module('demo', ['hopa-routes']);
+        var demo = HOPA.module('demo');
         demo.config(['hopa-routes'], function(routes) {
             routes.route('/user', 'user');
         });
@@ -41,7 +42,7 @@
         demo.view('user', 'views/user.html');
 
         demo.model('user', {
-            name: Hendrik
+            name: 'HoverBaum'
         });
 
 /*

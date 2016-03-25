@@ -7,65 +7,173 @@
 */
 const HOPA = function() {
 
-    let registeredModules = [];
+    const Models = HOPAModels();
+    const Views = HOPAViews();
 
-    /**
-     *   This will do the initialization of HOPA.
-     *   Should therefor be called on page load.
-     */
-    function initHOPA() {
+    let moduleCache = Object.create(null);
+    let waitingOnDependency = [];
 
-    }
-
-    function createAndRegisterModule(name, dependencies) {
-        var newModule = createNewModule(name);
-        dependencies.forEach(dependency => {
-            newModule.dependencies.push({
-                name: dependency,
-                loaded: false
-            });
+    function addModule(name, dependencies) {
+        let module = createNewModule(name, dependencies);
+        module.loadDependencies(dependencies).then(function() {
+            module.dependenciesLoaded();
         });
+        storeModule(name, module);
     }
 
     function createNewModule(name) {
         let newModule = {
             name: name,
-            dependencies: createDependenciesCache(),
-            configFunctions: []
-        };
-        let models = HOPAModels();
-        newModule.model = models.add;
-        let views = HOPAViews();
-        newModule.view = views.add;
-        newModule.config = function(dependencies, configFunction) {
-            addConfigFunctionToModule(newModule, dependencies, configFunction);
+            exports: null,
+            configFunctions: [],
+            exportFunction: null
         }
+        newModule.dependcies = createDependencyManager()
+        newModule.loadDependencies = function(dependencies) {
+            return loadDependenciesForModule(dependencies, module);
+        }
+        newModule.config = function(dependencies, configFunction) {
+            newModule.configFunctions.push({dependencies, configFunction});
+        }
+        newModule.dependenciesLoaded = function() {
+            startModule(newModule);
+        }
+        newModule.export = function(dependcies, exportFunction) {
+            newModule.exportFunction = {dependcies, exportFunction};
+        }
+        newModule.view = Views.add;
+        newModule.model = Models.add;
         return newModule;
     }
 
-    function addConfigFunctionToModule(module, dependencies, configFunction) {
+    function startModule(module) {
 
+        //Run config functions.
+        module.configFunctions.forEach(config => {
+            let dependencies = [];
+            config.dependencies.forEach(dependency => {
+                dependcies.push(moduleCache[dependency].exports);
+            });
+            config.configFunction(...dependcies);
+        });
+
+        //Run export function.
+        let dependencies = [];
+        module.exportFunction.dependencies.forEach(dependency => {
+            dependcies.push(moduleCache[dependency].exports);
+        });
+        module.exports = module.exportFunction(...dependcies);
     }
 
-    function createDependenciesCache() {
-        let cache = [];
 
-        //Add dependencies but only those that are new.
-        cache.add = addDependencyToChace;
+    function loadDependenciesForModule(dependencies, module) {
+        return new Promise((resolve, reject) => {
+            dependencies.forEach(dependency => {
+                module.dependencies.add(dependency, checkDependencies);
+            });
+
+            function checkDependencies() {
+                let allLoaded = dependencies.every(function(elm) {
+                    module.dependcies.hasLoaded(elm);
+                });
+                if(allLoaded) {
+                    resolve();
+                }
+            }
+            checkDependencies();
+        });
     }
 
-    function addDependencyToChace(cache, newDependency) {
-        let isNew = true;
-        cache.forEach(entry => {
-            if(entry.name === newDependency) {
-                isNew = false;
+    function executeCallbacks(callbacks, argument) {
+        callbacks.forEach(callback => {
+            callback(argument);
+        });
+    }
+
+    function createDependencyManager() {
+        let manager = {
+            dependencies: []
+        };
+
+        manager.add = function(name, callback) {
+            if(manager.get(name) === null) {
+                let dependency = {
+                    name: name,
+                    hasLoaded: false,
+                    onLoad: [callback]
+                };
+                manager.dependcies.push(dependency);
+                if(name in moduleCache) {
+                    dependency.hasLoaded = true;
+                    executeCallbacks(dependency.onLoad, moduleCache[name]);
+                    storeModule(name);
+                } else {
+                    waitingOnDependency.push(dependency);
+                }
+            }
+        }
+
+        //Check if this manager has a dependency.
+        manager.contains = function(name) {
+            let contains = (manager.get(name) !== null) ? true : false
+            return contains;
+        }
+
+        //Get a dependency by it's name.
+        manager.get = function(name) {
+            let found = null;
+            manager.dependcies.forEach(dependency => {
+                if(dependency.name === name) {
+                    found = dependency;
+                }
+            });
+            return found;
+        }
+
+        //Check if a given dependency has finished loading.
+        manager.hasLoaded = function(name) {
+            let dependency = manager.get(name);
+            if(dependency === null) {
+                return false;
+            } else {
+                return dependency.hasLoaded;
+            }
+        }
+
+        return manager;
+    }
+
+    function addRunFunctionToModule(dependencies, runFunction, newModule) {
+        //check if dependencies loaded
+        //store the run function to be run when all dependencies are loaded
+    }
+
+    function storeModule(name, module) {
+        moduleCache[name] = module;
+        waitingOnDependency.forEach(waiting => {
+            if(waiting.name === name) {
+                waiting.hasLoaded = true;
+                executeCallbacks(waiting.onLoad, module);
             }
         });
-        if(isNew) {
-            cache.push({
-                name: newDependency,
-                loaded: false
-            });
+    }
+
+    function createAndRegisterModule(name, dependencies) {
+        var newModule = getOrCreateModule(name);
+        moduleCache[name] = {
+            name,
+            newModule
+        };
+        return newModule;
+    }
+
+    function getOrCreateModule(name) {
+        if (name in moduleCache) {
+            return moduleCache[name];
+        } else {
+            let module = createNewModule(name);
+            moduleCache[name] = module;
+            return module;
         }
     }
 
