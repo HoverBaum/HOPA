@@ -144,4 +144,4 @@ const HOPAViews = function() {
         switchTo: switchViewTo
     }
 
-}();
+};

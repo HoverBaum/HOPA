@@ -229,4 +229,4 @@ const HOPAModels = function() {
         add: createModel,
         bindModelToHost: findAndBindModelToHost
     }
-}();
+};

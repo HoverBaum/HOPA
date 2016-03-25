@@ -3,7 +3,8 @@
    HOPA Routes implements handling of URLs and associated views.
 
 */
-const HOPARoutes = function() {
+const HOPARoutes = HOPA.module('hopa-routes', ['hopa-views']);
+HOPARoutes.run(['hopa-views'], function(Views) {
 
     //All routes that are registered with this handler.
     var registeredRoutes = [];
@@ -49,7 +50,7 @@ const HOPARoutes = function() {
      */
     function switchToRoute(route) {
         var parent = document.querySelector('[hopa-view]');
-        HOPAViews.switchTo(route.view, parent);
+        Views.switchTo(route.view, parent);
     }
 
     /**
@@ -63,9 +64,10 @@ const HOPARoutes = function() {
         registeredRoutes.push(newRoute);
     }
 
+    initRoutes();
+
     return {
-        register: registerRoute,
-        init: initRoutes
+        register: route,
     }
 
-}();
+});
